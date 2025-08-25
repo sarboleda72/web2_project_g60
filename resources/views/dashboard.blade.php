@@ -1,17 +1,11 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
+@section('module', 'Tablero principal')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+@section('content')
+<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Et corrupti quas natus tenetur id aliquam itaque beatae placeat perspiciatis non, iste quia rerum fugit ipsum! Voluptatem eos ducimus facilis repellat!
+Provident, eius quasi sunt dolores officiis minus. Quod itaque repellat earum officia tenetur, ducimus quam. Soluta odit non quas voluptates eaque laborum officia blanditiis mollitia dolore consequatur, amet in et.
+Sit natus amet reprehenderit ab quas, nemo laboriosam magnam asperiores numquam at sapiente, commodi voluptatum expedita harum, ratione a. Aperiam perferendis in at qui voluptatum fuga doloremque maiores illo reprehenderit.
+Aliquid quas tempore voluptas beatae, molestiae dolorum laboriosam consequatur adipisci libero sit neque numquam eaque iste vel exercitationem ducimus nulla iusto quis rerum vitae accusamus voluptate esse corporis nam. Unde!
+Placeat, provident? Dolorum ut ad possimus beatae nam quam accusantium, voluptatibus accusamus pariatur porro alias aliquid velit quod voluptates suscipit repellendus voluptas dolorem in fugiat. Consequatur laudantium ea ducimus facilis.</p>
+
+@endsection
