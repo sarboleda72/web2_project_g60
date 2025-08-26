@@ -12,13 +12,13 @@
     <title>Entregas con la mejor nota</title>
 
     <!-- Custom fonts for this template-->
-    <link href="{{asset('vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="{{asset('css/sb-admin-2.min.css')}}" rel="stylesheet">
+    <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('icon/favicon.png') }}">
@@ -26,14 +26,20 @@
 
 </head>
 
-<body style="background: radial-gradient(ellipse at center, #ff6f61 0%, #ff3c3c 60%, #b71c1c 100%), linear-gradient(135deg, #ff3c3c 0%, #ff6f61 50%, #b71c1c 100%); min-height: 100vh;">
+<body
+    style="background: radial-gradient(ellipse at center, #ff6f61 0%, #ff3c3c 60%, #b71c1c 100%), linear-gradient(135deg, #ff3c3c 0%, #ff6f61 50%, #b71c1c 100%); min-height: 100vh;">
 
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="container d-flex justify-content-center align-items-center fade" style="min-height: 100vh;">
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
                 <!-- Nested Row within Card Body -->
                 <div class="row">
                     <div class="col-lg-5 bg-register-image d-flex justify-content-center align-items-center">
+                        <div
+                            style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 320px; height: 320px; background: radial-gradient(circle at center, #ffd600 0%, #ffe066 80%, #ffd600 100%); border-radius: 50%; z-index: 1; display: flex; align-items: center; justify-content: center;">
+                            <img src="{{ asset('icon/icon.png') }}" alt="Logo"
+                                style="max-width: 70%; height: auto; position: relative; z-index: 2;">
+                        </div>
                         <img src="{{ asset('icon/icon.png') }}" alt="Logo" style="max-width: 70%; height: auto;">
                     </div>
                     <div class="col-lg-7">
@@ -41,54 +47,71 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">¡Crear una cuenta!</h1>
                             </div>
-                            <form class="user">
-                                <form method="POST" action="{{ route('register') }}">
-                                    @csrf
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="text" class="form-control form-control-user" id="name" name="name" value="{{ old('name') }}" placeholder="Nombres" required autofocus autocomplete="name">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control form-control-user" id="lastname" name="lastname" value="{{ old('lastname') }}" placeholder="Apellidos" required autocomplete="lastname">
-                                        </div>
+
+                            <form method="POST" class="user" action="{{ route('register') }} ">
+                                @csrf
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="text" class="form-control form-control-user" id="name"
+                                            name="name" value="{{ old('name') }}" placeholder="Nombres" required
+                                            autofocus autocomplete="name">
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="number" class="form-control form-control-user" id="phone" name="phone" value="{{ old('phone') }}" placeholder="Teléfono" required autocomplete="phone">
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="text" class="form-control form-control-user" id="address" name="address" value="{{ old('address') }}" placeholder="Dirección" required autocomplete="address">
-                                        </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control form-control-user" id="lastname"
+                                            name="lastname" value="{{ old('lastname') }}" placeholder="Apellidos"
+                                            required autocomplete="lastname">
                                     </div>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control form-control-user" id="email" name="email" value="{{ old('email') }}" placeholder="Correo electrónico" required autocomplete="username">
-                                        @if ($errors->has('email'))
-                                            <span class="text-danger small">{{ $errors->first('email') }}</span>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="number" class="form-control form-control-user" id="phone"
+                                            name="phone" value="{{ old('phone') }}" placeholder="Teléfono" required
+                                            autocomplete="phone">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control form-control-user" id="address"
+                                            name="address" value="{{ old('address') }}" placeholder="Dirección"
+                                            required autocomplete="address">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" class="form-control form-control-user" id="email"
+                                        name="email" value="{{ old('email') }}" placeholder="Correo electrónico"
+                                        required autocomplete="username">
+                                    @if ($errors->has('email'))
+                                        <span class="text-danger small">{{ $errors->first('email') }}</span>
+                                    @endif
+                                </div>
+                                <div class="form-group row">
+                                    <div class="col-sm-6 mb-3 mb-sm-0">
+                                        <input type="password" class="form-control form-control-user" id="password"
+                                            name="password" placeholder="Contraseña" required
+                                            autocomplete="new-password">
+                                        @if ($errors->has('password'))
+                                            <span class="text-danger small">{{ $errors->first('password') }}</span>
                                         @endif
                                     </div>
-                                    <div class="form-group row">
-                                        <div class="col-sm-6 mb-3 mb-sm-0">
-                                            <input type="password" class="form-control form-control-user" id="password" name="password" placeholder="Contraseña" required autocomplete="new-password">
-                                            @if ($errors->has('password'))
-                                                <span class="text-danger small">{{ $errors->first('password') }}</span>
-                                            @endif
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <input type="password" class="form-control form-control-user" id="password_confirmation" name="password_confirmation" placeholder="Confirmar contraseña" required autocomplete="new-password">
-                                            @if ($errors->has('password_confirmation'))
-                                                <span class="text-danger small">{{ $errors->first('password_confirmation') }}</span>
-                                            @endif
-                                        </div>
+                                    <div class="col-sm-6">
+                                        <input type="password" class="form-control form-control-user"
+                                            id="password_confirmation" name="password_confirmation"
+                                            placeholder="Confirmar contraseña" required autocomplete="new-password">
+                                        @if ($errors->has('password_confirmation'))
+                                            <span
+                                                class="text-danger small">{{ $errors->first('password_confirmation') }}</span>
+                                        @endif
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-user btn-block">Registrarse</button>
-                                </form>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-user btn-block">Registrarse</button>
                             </form>
+
                             <hr>
                             <div class="text-center">
-                                <a class="small" href="{{ route('password.request') }}">¿Olvidaste tu contraseña?</a>
+                                <a class="small" href="{{ route('password.request') }}">¿Olvidaste tu
+                                    contraseña?</a>
                             </div>
                             <div class="text-center">
-                                <a class="small" href="{{url('login')}}">¿Ya tienes una cuenta? ¡Inicia sesión!</a>
+                                <a class="small" href="{{ url('login') }}">¿Ya tienes una cuenta? ¡Inicia
+                                    sesión!</a>
                             </div>
                         </div>
                     </div>
@@ -107,6 +130,25 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var container = document.querySelector('.container.fade');
+        setTimeout(function() {
+          container.classList.add('show');
+        }, 10); // fade-in 400ms
+        document.querySelectorAll('a.small').forEach(function(link) {
+          link.addEventListener('click', function(e) {
+            if (link.getAttribute('href') && link.getAttribute('href').charAt(0) !== '#') {
+              e.preventDefault();
+              container.classList.remove('show');
+              setTimeout(function() {
+                window.location.href = link.href;
+              }, 400); // fade-out 400ms
+            }
+          });
+        });
+      });
+    </script>
 
 </body>
 

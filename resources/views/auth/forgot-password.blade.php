@@ -25,7 +25,7 @@
 </head>
 
 <body style="background: radial-gradient(ellipse at center, #ff6f61 0%, #ff3c3c 60%, #b71c1c 100%), linear-gradient(135deg, #ff3c3c 0%, #ff6f61 50%, #b71c1c 100%); min-height: 100vh;">
-    <div class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="container d-flex justify-content-center align-items-center fade" style="min-height: 100vh;">
         <div class="card o-hidden border-0 shadow-lg my-5">
             <div class="card-body p-0">
                 <div class="row">
@@ -68,6 +68,25 @@
 
     <!-- Custom scripts for all pages-->
     <script src="js/sb-admin-2.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        var container = document.querySelector('.container.fade');
+        setTimeout(function() {
+          container.classList.add('show');
+        }, 10); // fade-in 400ms
+        document.querySelectorAll('a.small').forEach(function(link) {
+          link.addEventListener('click', function(e) {
+            if (link.getAttribute('href') && link.getAttribute('href').charAt(0) !== '#') {
+              e.preventDefault();
+              container.classList.remove('show');
+              setTimeout(function() {
+                window.location.href = link.href;
+              }, 400); // fade-out 400ms
+            }
+          });
+        });
+      });
+    </script>
 
 </body>
 
