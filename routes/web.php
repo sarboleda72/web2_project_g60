@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProductController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +20,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resources([
         'users' => UserController::class
+    ]);
+
+    Route::resources([
+        'products' => ProductController::class
     ]);
 });
 
