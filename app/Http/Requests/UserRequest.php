@@ -21,13 +21,15 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        //dd($this->all());
         if ($this->method() == "PUT") {
             return [
-                'nameEdit' => ['required', 'string', 'max:20'],
-                'lastnameEdit' => ['required', 'string', 'max:50'],
-                'phoneEdit' => ['required', 'string', 'max:14'],
-                'addressEdit' => ['required', 'string', 'max:50'],
-                'emailEdit' => ['required', 'string', 'lowercase', 'email', 'max:100', 'unique:' . User::class.',email,'.$this->id],
+                'name' => ['required', 'string', 'max:20'],
+                'lastname' => ['required', 'string', 'max:50'],
+                'phone' => ['required', 'string', 'max:14'],
+                'address' => ['required', 'string', 'max:50'],
+                'email' => ['required', 'string', 'lowercase', 'email', 'max:100', 'unique:' . User::class.',email,'.$this->id],
             ];
         }
 

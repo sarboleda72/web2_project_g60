@@ -15,7 +15,7 @@ class UserController extends Controller
     {
         //
         $users = User::All();
-        return view('users.index')->with(['users'=> $users]);
+        return view('users.index')->with(['users' => $users]);
     }
 
     /**
@@ -32,15 +32,15 @@ class UserController extends Controller
     public function store(UserRequest $request)
     {
         $user = new User;
-        $user -> name = $request->name;
-        $user -> lastname = $request->lastname;
-        $user -> phone = $request->phone;
-        $user -> address = $request->address;
-        $user -> email = $request->email;
-        $user -> password = bcrypt($request->password);
+        $user->name = $request->name;
+        $user->lastname = $request->lastname;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
 
-        if( $user -> save() ){
-            return redirect('users')->with('messages', 'El usuario: '. $user -> name .'¡Fue creado!');
+        if ($user->save()) {
+            return redirect('users')->with('messages', 'El usuario: ' . $user->name . '¡Fue creado!');
         }
     }
 
@@ -65,14 +65,14 @@ class UserController extends Controller
      */
     public function update(userRequest $request, User $user)
     {
-        $user -> name = $request->nameEdit;
-        $user -> lastname = $request->lastnameEdit;
-        $user -> phone = $request->phoneEdit;
-        $user -> address = $request->addressEdit;
-        $user -> email = $request->emailEdit;
+        $user->name = $request->name;
+        $user->lastname = $request->lastname;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->email = $request->email;
 
-        if( $user -> save() ){
-            return redirect('users')->with('messages', 'El usuario: '. $user -> name .'¡Fue actualizado!');
+        if ($user->save()) {
+            return redirect('users')->with('messages', 'El usuario: ' . $user->name . '¡Fue actualizado!');
         }
     }
 
@@ -81,6 +81,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+        if ($user->delete()) {
+            return redirect('users')->with('messages', 'El usuario: ' . $user->name . '¡Fue eliminado!');
+        }
     }
 }

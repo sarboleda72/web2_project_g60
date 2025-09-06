@@ -32,8 +32,11 @@
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->lastname }}</td>
                                 <td>{{ $user->phone }}</td>
-                                <td><button class="btn btn-primary edit" data-bs-toggle="modal"
-                                        data-bs-target="#modalEdit" id="{{$user->id}}">Editar</button></td>
+                                <td><button class="btn btn-primary edit" data-bs-toggle="modal" data-bs-target="#modalEdit"
+                                        id="{{ $user->id }}">Editar</button>
+                                    <button class="btn btn-danger delete" data-bs-toggle="modal"
+                                        data-bs-target="#modalDelete" id="{{ $user->id }}">Eliminar</button>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -116,9 +119,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="PUT" class="user" action="{{ route('users.update', $user->id) }}">
+                    <form method="PUT" id="formEdit" class="user" action="{{ route('users.update', $user->id) }}">
                         @csrf
-                        @method("PUT")
+                        @method('PUT')
                         <input type="text" id="userId" name="id" hidden>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
@@ -160,14 +163,38 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Usuario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="DELETE" id="formDelete" class="user"
+                        action="{{ route('users.destroy', $user->id) }}">
+                        @csrf
+                        @method('DELETE')
+
+                        <p>¿Realmente quiere eliminar este usuario?</p>
+                        <p>Esta acción es irrevercible.</p>
+                        <button type="submit" id="delete" class="btn btn-danger btn-user btn-block">Eliminar</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
     <script>
-        $(document).on('click', '.edit', function(){
+        $(document).on('click', '.edit', function() {
             var userId = $(this).attr('id');
 
-            $.get('users/' + userId + '/edit', {}, function(data){
+            $.get('users/' + userId + '/edit', {}, function(data) {
                 var user = data.user;
                 $('input[id="userId"]').val(userId);
                 $('input[id="nameEdit"]').val(user.name);
@@ -175,6 +202,45 @@
                 $('input[id="phoneEdit"]').val(user.phone);
                 $('input[id="addressEdit"]').val(user.address);
                 $('input[id="emailEdit"]').val(user.email);
+            })
+        })
+
+        $('#formEdit').submit(function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var userId = form.find('input[name="id"]').val();
+            var url = "/users/" + userId;
+
+            $.ajax({
+                url: url,
+                type: 'PUT',
+                data: form.serialize()
+            }).always(function(respose) {
+                console.log("Actualización exitosa", respose);
+                location.reload();
+            })
+        })
+
+        $(document).on('click', '.delete', function() {
+            var userId = $(this).attr('id');
+            $('button[id="delete"]').val(userId);
+        })
+
+        $('#formDelete').submit(function(e) {
+            e.preventDefault();
+
+            var form = $(this);
+            var userId = form.find('button[id="delete"]').val();
+            var url = "/users/" + userId;
+
+            $.ajax({
+                url: url,
+                type: 'DELETE',
+                data: form.serialize()
+            }).always(function(respose) {
+                console.log("Eliminación exitosa", respose);
+                location.reload();
             })
         })
     </script>
