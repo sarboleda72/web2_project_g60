@@ -38,7 +38,7 @@ class ProductController extends Controller
         $product -> available = $request -> available;
 
         if ($product -> save()){
-            return redirect('products')->with('messages', 'El producto: ' . $product->name . '¡Fue creado!');
+            return redirect('products')->with('messages', 'El producto: ' . $product->name . ' ¡Fue creado!');
         }
     }
 
@@ -69,7 +69,7 @@ class ProductController extends Controller
         $product -> available = $request -> available;
 
         if ($product -> save()){
-            return redirect('products')->with('messages', 'El prducto: ' . $product->name . '¡Fue actualizado!');
+            return redirect('products')->with('messages', 'El prducto: ' . $product->name . ' ¡Fue actualizado!');
         }
     }
 
@@ -79,7 +79,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         if ($product->delete()) {
-            return redirect('products')->with('messages', 'El producto: ' . $product->name . '¡Fue eliminado!');
+            return redirect('products')->with('messages', 'El producto: ' . $product->name . ' ¡Fue eliminado!');
         }
     }
 }

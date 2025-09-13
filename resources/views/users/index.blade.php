@@ -12,26 +12,32 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>Foto</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Teléfono</th>
+                            <th>Correo</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
+                            <th>Foto</th>
                             <th>Nombre</th>
                             <th>Apellido</th>
                             <th>Teléfono</th>
+                            <th>Correo</th>
                             <th>Acciones</th>
                         </tr>
                     </tfoot>
-                    <tbody>
+                    <tbody class="insertSearch">
                         @foreach ($users as $user)
                             <tr>
+                                <td><img src="{{ asset('img') }}/{{ $user->photo }}" alt="" width="50px"></td>
                                 <td>{{ $user->name }}</td>
                                 <td>{{ $user->lastname }}</td>
                                 <td>{{ $user->phone }}</td>
+                                <td>{{ $user->email }}</td>
                                 <td><button class="btn btn-primary edit" data-bs-toggle="modal" data-bs-target="#modalEdit"
                                         id="{{ $user->id }}">Editar</button>
                                     <button class="btn btn-danger delete" data-bs-toggle="modal"
@@ -54,8 +60,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" class="user" action="{{ route('users.store') }} ">
+                    <form method="POST" class="user" action="{{ route('users.store') }}" enctype="multipart/form-data">
                         @csrf
+
+                        <div class="form-group row">
+                                <input type="file" class="form-control form-control-user" id="photo" name="photo">
+                        </div>
+
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="name" name="name"
@@ -119,10 +130,16 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="PUT" id="formEdit" class="user" action="{{ route('users.update', $user->id) }}">
+                    <form method="PUT" id="formEdit" class="user" action="{{ route('users.update', $user->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <input type="text" id="userId" name="id" hidden>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img id="photoShow" src="{{ asset('img') }}/{{ $user->photo }}" alt="" width="100px">
+                        </div>
+                        <div class="form-group row">
+                                <input type="file" class="form-control form-control-user" id="photoEdit" name="photo">
+                        </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
                                 <input type="text" class="form-control form-control-user" id="nameEdit"
@@ -202,20 +219,27 @@
                 $('input[id="phoneEdit"]').val(user.phone);
                 $('input[id="addressEdit"]').val(user.address);
                 $('input[id="emailEdit"]').val(user.email);
+                $('img[id="photoShow"]').attr('src', "{{ asset('img') }}/" + user.photo);
             })
         })
 
         $('#formEdit').submit(function(e) {
             e.preventDefault();
 
-            var form = $(this);
-            var userId = form.find('input[name="id"]').val();
+            var form = $(this)[0];
+            var userId =$('input[name="id"]').val();
             var url = "/users/" + userId;
+            var formData = new FormData(form);
 
             $.ajax({
                 url: url,
-                type: 'PUT',
-                data: form.serialize()
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers:{
+                    'X-HTTP-Method-Override': 'PUT'
+                }
             }).always(function(respose) {
                 console.log("Actualización exitosa", respose);
                 location.reload();
@@ -241,6 +265,19 @@
             }).always(function(respose) {
                 console.log("Eliminación exitosa", respose);
                 location.reload();
+            })
+        })
+
+        $('#qSearch').on('keyup', function(e) {
+            e.preventDefault();
+            $query = $(this).val();
+            $token = $('input[name=_token]').val();
+
+            $.post('users/search', {
+                q: $query,
+                _token: $token
+            }, function(data) {
+                $(".insertSearch").empty().append(data);
             })
         })
     </script>

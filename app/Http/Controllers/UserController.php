@@ -39,8 +39,15 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = bcrypt($request->password);
 
+        if($request->hasFile('photo')){
+            $file = $request->file('photo');
+            $fileName = uniqid('user_').'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('img'), $fileName);
+            $user->photo = $fileName; 
+        }
+
         if ($user->save()) {
-            return redirect('users')->with('messages', 'El usuario: ' . $user->name . '¡Fue creado!');
+            return redirect('users')->with('messages', 'El usuario: ' . $user->name . ' ¡Fue creado!');
         }
     }
 
@@ -71,8 +78,15 @@ class UserController extends Controller
         $user->address = $request->address;
         $user->email = $request->email;
 
+        if($request->hasFile('photo')){
+            $file = $request->file('photo');
+            $fileName = uniqid('user_').'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('img'), $fileName);
+            $user->photo = $fileName; 
+        }
+
         if ($user->save()) {
-            return redirect('users')->with('messages', 'El usuario: ' . $user->name . '¡Fue actualizado!');
+            return redirect('users')->with('messages', 'El usuario: ' . $user->name . ' ¡Fue actualizado!');
         }
     }
 
@@ -82,7 +96,13 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         if ($user->delete()) {
-            return redirect('users')->with('messages', 'El usuario: ' . $user->name . '¡Fue eliminado!');
+            return redirect('users')->with('messages', 'El usuario: ' . $user->name . ' ¡Fue eliminado!');
         }
+    }
+
+    public function search(Request $request){
+        //dd($request->q);
+        $users = User::names($request->q)->paginate(100);
+        return view('users.search')->with(['users' => $users]);
     }
 }

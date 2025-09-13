@@ -51,7 +51,16 @@ class User extends Authenticatable
         ];
     }
 
-    public function Order(){
+    public function Order()
+    {
         return $this->belongsTo('App\Models\Order');
+    }
+
+    public function scopeNames($users, $query)
+    {
+        if (trim($query)) {
+            $users->where('name', 'LIKE', '%' . $query . '%')
+                ->orWhere('email', 'LIKE', '%' . $query . '%');
+        }
     }
 }

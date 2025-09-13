@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('module', 'Usuarios')
+@section('module', 'Productos')
 
 @section('content')
     <!-- DataTales Example -->
@@ -73,11 +73,15 @@
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="description" name="description"
-                                    value="{{ old('description') }}" placeholder="Descripción" required autocomplete="description">
+                                <input type="text" class="form-control form-control-user" id="description"
+                                    name="description" value="{{ old('description') }}" placeholder="Descripción" required
+                                    autocomplete="description">
                             </div>
                             <div class="col-sm-6">
-                                <input type="checkbox" class="" id="available" name="available" value="1" required>
+                                <label for="availableEdit">Disponible</label>
+                                <input type="hidden" name="available" value="0">
+                                <input type="checkbox" class="" id="available" name="available" value="1"
+                                    {{ old('available') ? 'checked' : '' }}>
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-user btn-block">Crear</button>
@@ -89,7 +93,7 @@
         </div>
     </div>
 
-     <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -97,7 +101,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="PUT" id="formEdit" class="user" action="{{ route('products.update', $product->id) }}">
+                    <form method="PUT" id="formEdit" class="user"
+                        action="{{ route('products.update', $product->id) }}">
                         @csrf
                         @method('PUT')
                         <input type="text" id="productId" name="id" hidden>
@@ -108,17 +113,22 @@
                                     autocomplete="name">
                             </div>
                             <div class="col-sm-6">
-                                <input type="number" class="form-control form-control-user" id="priceEdit" name="price"
-                                    value="{{ old('price') }}" placeholder="Precio" required autocomplete="price">
+                                <input type="number" class="form-control form-control-user" id="priceEdit"
+                                    name="price" value="{{ old('price') }}" placeholder="Precio" required
+                                    autocomplete="price">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="descriptionEdit" name="description"
-                                    value="{{ old('description') }}" placeholder="Descripción" required autocomplete="description">
+                                <input type="text" class="form-control form-control-user" id="descriptionEdit"
+                                    name="description" value="{{ old('description') }}" placeholder="Descripción"
+                                    required autocomplete="description">
                             </div>
                             <div class="col-sm-6">
-                                <input type="checkbox" class="" id="availableEdit" name="available" value="1" required>
+                                <label for="availableEdit">Disponible</label>
+                                <input type="hidden" name="available" value="0">
+                                <input type="checkbox" class="" id="availableEdit" name="available"
+                                    value="1">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-user btn-block">Editar</button>
@@ -128,7 +138,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 
     <div class="modal fade" id="modalDelete" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -143,7 +153,7 @@
                         @csrf
                         @method('DELETE')
 
-                        <p>¿Realmente quiere eliminar este usuario?</p>
+                        <p>¿Realmente quiere eliminar este producto?</p>
                         <p>Esta acción es irrevercible.</p>
                         <button type="submit" id="delete" class="btn btn-danger btn-user btn-block">Eliminar</button>
                     </form>
@@ -152,7 +162,7 @@
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 @endsection
 
 @section('script')
@@ -166,7 +176,9 @@
                 $('input[id="nameEdit"]').val(product.name);
                 $('input[id="priceEdit"]').val(product.price);
                 $('input[id="descriptionEdit"]').val(product.description);
-                $('input[id="availableEdit"]').val(product.available);
+                if (product.available == 1) {
+                    $('input[id="availableEdit"]').prop('checked', true);
+                }
             })
         })
 
@@ -188,8 +200,8 @@
         })
 
         $(document).on('click', '.delete', function() {
-            var userId = $(this).attr('id');
-            $('button[id="delete"]').val(userId);
+            var productId = $(this).attr('id');
+            $('button[id="delete"]').val(productId);
         })
 
         $('#formDelete').submit(function(e) {
