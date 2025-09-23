@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -24,6 +25,10 @@ Route::middleware('auth')->group(function () {
 
     Route::resources([
         'products' => ProductController::class
+    ]);
+
+    Route::resources([
+        'orders' => OrderController::class
     ]);
 });
 
