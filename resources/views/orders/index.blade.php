@@ -1,49 +1,50 @@
 @extends('layouts.app')
-@section('module', 'Productos')
+@section('module', 'Órdenes')
 
 @section('content')
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary"></h6>
+            <h6 class="m-0 font-weight-bold text-primary">Listado de Órdenes</h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Dirección</th>
-                            <th>descripción</th>
-                            <th>total</th>
-                            <th>producto</th>
-                            <th>cliente</th>
-                            <th>acciones</th>
+                            <th>Nombre Usuario</th>
+                            <th>Teléfono Usuario</th>
+                            <th>Dirección de Entrega</th>
+                            <th>Descripción Orden</th>
+                            <th>Total</th>
+                            <th>Nombre Producto</th>
+                            <th>Precio Producto</th>
+                            <th>Descripción Producto</th>
+                            <th>Foto Producto</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
-                    <tfoot>
-                        <tr>
-                            <th>Dirección</th>
-                            <th>descripción</th>
-                            <th>total</th>
-                            <th>producto</th>
-                            <th>cliente</th>
-                            <th>acciones</th>
-                        </tr>
-                    </tfoot>
                     <tbody>
                         @foreach ($orders as $order)
                             <tr>
+                                <td>{{ $order->user->name }}</td>
+                                <td>{{ $order->user->phone }}</td>
                                 <td>{{ $order->delivery_address }}</td>
                                 <td>{{ $order->description }}</td>
                                 <td>{{ $order->total }}</td>
-                                {{-- <td>{{ $order->user }}</td> --}}
-                                 @foreach ($orders->users as $user)
-                                <td>{{ $user->name }}</td>
-                                @endforeach
-                                <td><button class="btn btn-primary edit" data-bs-toggle="modal" data-bs-target="#modalEdit"
-                                        id="{{ $order->id }}">Editar</button>
-                                    <button class="btn btn-danger delete" data-bs-toggle="modal"
-                                        data-bs-target="#modalDelete" id="{{ $order->id }}">Eliminar</button>
+                                <td>{{ $order->product->name }}</td>
+                                <td>{{ $order->product->price }}</td>
+                                <td>{{ $order->product->description }}</td>
+                                <td>
+                                    @if($order->product && $order->product->photo)
+                                        <img src="{{ asset('storage/' . $order->product->photo) }}" alt="Foto" style="max-width: 80px; max-height: 80px;">
+                                    @else
+                                        -
+                                    @endif
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary edit" data-bs-toggle="modal" data-bs-target="#modalEdit" id="{{ $order->id }}">Editar</button>
+                                    <button class="btn btn-danger delete" data-bs-toggle="modal" data-bs-target="#modalDelete" id="{{ $order->id }}">Eliminar</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -58,34 +59,46 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Ordenes</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Órdenes</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" class="user" action="{{ route('products.store') }} ">
+                    <form method="POST" class="user" action="{{ route('orders.store') }} ">
                         @csrf
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="name" name="name"
-                                    value="{{ old('name') }}" placeholder="Nombres" required autofocus
-                                    autocomplete="name">
+                                <label for="user_id">Usuario</label>
+                                <select class="form-control" id="user_id" name="user_id" required>
+                                    <option value="">Seleccione un usuario</option>
+                                    @foreach($users as $user)
+                                        <option value="{{ $user->id }}">{{ $user->name }} - {{ $user->email }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="col-sm-6">
-                                <input type="number" class="form-control form-control-user" id="price" name="price"
-                                    value="{{ old('price') }}" placeholder="Precio" required autocomplete="price">
+                                <label for="product_id">Producto</label>
+                                <select class="form-control" id="product_id" name="product_id" required>
+                                    <option value="">Seleccione un producto</option>
+                                    @foreach($products as $product)
+                                        <option value="{{ $product->id }}">{{ $product->name }} - ${{ $product->price }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="description"
-                                    name="description" value="{{ old('description') }}" placeholder="Descripción" required
-                                    autocomplete="description">
+                                <input type="text" class="form-control form-control-user" id="delivery_address" name="delivery_address"
+                                    value="{{ old('delivery_address') }}" placeholder="Dirección de Entrega" required autofocus autocomplete="delivery_address">
                             </div>
                             <div class="col-sm-6">
-                                <label for="availableEdit">Disponible</label>
-                                <input type="hidden" name="available" value="0">
-                                <input type="checkbox" class="" id="available" name="available" value="1"
-                                    {{ old('available') ? 'checked' : '' }}>
+                                <input type="number" class="form-control form-control-user" id="total" name="total"
+                                    value="{{ old('total') }}" placeholder="Total" required autocomplete="total">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control form-control-user" id="description"
+                                    name="description" value="{{ old('description') }}" placeholder="Descripción" required autocomplete="description">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-user btn-block">Crear</button>
@@ -101,38 +114,28 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Productos</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Órdenes</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="PUT" id="formEdit" class="user"
-                        action="{{ route('products.update', $order->id) }}">
+                    <form method="PUT" id="formEdit" class="user" action="{{ route('orders.update', $order->id) }}">
                         @csrf
                         @method('PUT')
-                        <input type="text" id="productId" name="id" hidden>
+                        <input type="text" id="orderId" name="id" hidden>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="nameEdit" name="name"
-                                    value="{{ old('name') }}" placeholder="Nombres" required autofocus
-                                    autocomplete="name">
+                                <input type="text" class="form-control form-control-user" id="delivery_addressEdit" name="delivery_address"
+                                    value="{{ old('delivery_address') }}" placeholder="Dirección de Entrega" required autofocus autocomplete="delivery_address">
                             </div>
                             <div class="col-sm-6">
-                                <input type="number" class="form-control form-control-user" id="priceEdit"
-                                    name="price" value="{{ old('price') }}" placeholder="Precio" required
-                                    autocomplete="price">
+                                <input type="number" class="form-control form-control-user" id="totalEdit"
+                                    name="total" value="{{ old('total') }}" placeholder="Total" required autocomplete="total">
                             </div>
                         </div>
                         <div class="form-group row">
-                            <div class="col-sm-6 mb-3 mb-sm-0">
+                            <div class="col-sm-12">
                                 <input type="text" class="form-control form-control-user" id="descriptionEdit"
-                                    name="description" value="{{ old('description') }}" placeholder="Descripción"
-                                    required autocomplete="description">
-                            </div>
-                            <div class="col-sm-6">
-                                <label for="availableEdit">Disponible</label>
-                                <input type="hidden" name="available" value="0">
-                                <input type="checkbox" class="" id="availableEdit" name="available"
-                                    value="1">
+                                    name="description" value="{{ old('description') }}" placeholder="Descripción" required autocomplete="description">
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-user btn-block">Editar</button>
@@ -148,16 +151,14 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">Productos</h1>
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Órdenes</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="DELETE" id="formDelete" class="user"
-                        action="{{ route('products.destroy', $order->id) }}">
+                    <form method="DELETE" id="formDelete" class="user" action="{{ route('orders.destroy', $order->id) }}">
                         @csrf
                         @method('DELETE')
-
-                        <p>¿Realmente quiere eliminar este producto?</p>
+                        <p>¿Realmente quiere eliminar esta orden?</p>
                         <p>Esta acción es irrevercible.</p>
                         <button type="submit" id="delete" class="btn btn-danger btn-user btn-block">Eliminar</button>
                     </form>
@@ -172,27 +173,21 @@
 @section('script')
     <script>
         $(document).on('click', '.edit', function() {
-            var productId = $(this).attr('id');
-
-            $.get('products/' + productId + '/edit', {}, function(data) {
-                var product = data.product;
-                $('input[id="productId"]').val(productId);
-                $('input[id="nameEdit"]').val(product.name);
-                $('input[id="priceEdit"]').val(product.price);
-                $('input[id="descriptionEdit"]').val(product.description);
-                if (product.available == 1) {
-                    $('input[id="availableEdit"]').prop('checked', true);
-                }
+            var orderId = $(this).attr('id');
+            $.get('orders/' + orderId + '/edit', {}, function(data) {
+                var order = data.order;
+                $('input[id="orderId"]').val(orderId);
+                $('input[id="delivery_addressEdit"]').val(order.delivery_address);
+                $('input[id="totalEdit"]').val(order.total);
+                $('input[id="descriptionEdit"]').val(order.description);
             })
         })
 
         $('#formEdit').submit(function(e) {
             e.preventDefault();
-
             var form = $(this);
-            var productId = form.find('input[name="id"]').val();
-            var url = "/products/" + productId;
-
+            var orderId = form.find('input[name="id"]').val();
+            var url = "/orders/" + orderId;
             $.ajax({
                 url: url,
                 type: 'PUT',
@@ -204,17 +199,15 @@
         })
 
         $(document).on('click', '.delete', function() {
-            var productId = $(this).attr('id');
-            $('button[id="delete"]').val(productId);
+            var orderId = $(this).attr('id');
+            $('button[id="delete"]').val(orderId);
         })
 
         $('#formDelete').submit(function(e) {
             e.preventDefault();
-
             var form = $(this);
-            var productId = form.find('button[id="delete"]').val();
-            var url = "/products/" + productId;
-
+            var orderId = form.find('button[id="delete"]').val();
+            var url = "/orders/" + orderId;
             $.ajax({
                 url: url,
                 type: 'DELETE',

@@ -32,12 +32,19 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $product = new Product;
-        $product -> name = $request -> name;
-        $product -> price = $request -> price;
-        $product -> description = $request -> description;
-        $product -> available = $request -> available;
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->available = $request->available;
 
-        if ($product -> save()){
+        if($request->hasFile('photo')){
+            $file = $request->file('photo');
+            $fileName = uniqid('product_').'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('img'), $fileName);
+            $product->photo = $fileName;
+        }
+
+        if ($product->save()){
             return redirect('products')->with('messages', 'El producto: ' . $product->name . ' ¡Fue creado!');
         }
     }
@@ -63,13 +70,20 @@ class ProductController extends Controller
      */
     public function update(ProductRequest $request, Product $product)
     {
-        $product -> name = $request -> name;
-        $product -> price = $request -> price;
-        $product -> description = $request -> description;
-        $product -> available = $request -> available;
+        $product->name = $request->name;
+        $product->price = $request->price;
+        $product->description = $request->description;
+        $product->available = $request->available;
 
-        if ($product -> save()){
-            return redirect('products')->with('messages', 'El prducto: ' . $product->name . ' ¡Fue actualizado!');
+        if($request->hasFile('photo')){
+            $file = $request->file('photo');
+            $fileName = uniqid('product_').'.'.$file->getClientOriginalExtension();
+            $file->move(public_path('img'), $fileName);
+            $product->photo = $fileName;
+        }
+
+        if ($product->save()){
+            return redirect('products')->with('messages', 'El producto: ' . $product->name . ' ¡Fue actualizado!');
         }
     }
 

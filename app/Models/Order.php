@@ -18,11 +18,11 @@ class Order extends Model
     ];
 
     public function user(){
-        return $this->hasMany('App\Models\User');
+        return $this->belongsTo('App\Models\User');
     }
 
     public function product(){
-        return $this->hasMany('App\Models\Product');
+        return $this->belongsTo('App\Models\Product');
     }
 
 }

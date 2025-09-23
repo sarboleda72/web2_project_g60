@@ -116,6 +116,37 @@
                 </div>
             </li>
 
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Órdenes
+            </div>
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseOrders"
+                    aria-expanded="true" aria-controls="collapseOrders">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>CRUD</span>
+                </a>
+                <div id="collapseOrders" @if (!request()->routeIs('orders.*')) class="collapse" @endif
+                    @if (request()->routeIs('orders.*')) class="collapse show" @endif aria-labelledby="headingOrders"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Listar, Crear</h6>
+                        @if (!request()->routeIs('orders.*'))
+                            <a class="collapse-item" href="{{ route('orders.index') }}">Listar</a>
+                        @endif
+                        {{-- <a class="collapse-item" href="cards.html">Crear</a> --}}
+                        @if (request()->routeIs('orders.*'))
+                            <a class="collapse-item" data-bs-toggle="modal" data-bs-target="#modalCreate">Crear</a>
+                        @endif
+                    </div>
+                </div>
+            </li>
+
             <!-- Nav Item - Utilities Collapse Menu -->
             {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"

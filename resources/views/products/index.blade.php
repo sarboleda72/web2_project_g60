@@ -12,6 +12,7 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
+                            <th>Foto</th>
                             <th>Nombre</th>
                             <th>Precio</th>
                             <th>Descripción</th>
@@ -21,25 +22,25 @@
                     </thead>
                     <tfoot>
                         <tr>
+                            <th>Foto</th>
                             <th>Nombre</th>
                             <th>Precio</th>
                             <th>Descripción</th>
                             <th>Disponible</th>
                             <th>Acciones</th>
-
                         </tr>
                     </tfoot>
                     <tbody>
                         @foreach ($products as $product)
                             <tr>
+                                <td><img src="{{ asset('img') }}/{{ $product->photo }}" alt="" width="50px"></td>
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->price }}</td>
                                 <td>{{ $product->description }}</td>
                                 <td>{{ $product->available }}</td>
-                                <td><button class="btn btn-primary edit" data-bs-toggle="modal" data-bs-target="#modalEdit"
-                                        id="{{ $product->id }}">Editar</button>
-                                    <button class="btn btn-danger delete" data-bs-toggle="modal"
-                                        data-bs-target="#modalDelete" id="{{ $product->id }}">Eliminar</button>
+                                <td>
+                                    <button class="btn btn-primary edit" data-bs-toggle="modal" data-bs-target="#modalEdit" id="{{ $product->id }}">Editar</button>
+                                    <button class="btn btn-danger delete" data-bs-toggle="modal" data-bs-target="#modalDelete" id="{{ $product->id }}">Eliminar</button>
                                 </td>
                             </tr>
                         @endforeach
@@ -58,30 +59,27 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" class="user" action="{{ route('products.store') }} ">
+                    <form method="POST" class="user" action="{{ route('products.store') }}" enctype="multipart/form-data">
                         @csrf
                         <div class="form-group row">
+                            <input type="file" class="form-control form-control-user" id="photo" name="photo">
+                        </div>
+                        <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="name" name="name"
-                                    value="{{ old('name') }}" placeholder="Nombres" required autofocus
-                                    autocomplete="name">
+                                <input type="text" class="form-control form-control-user" id="name" name="name" value="{{ old('name') }}" placeholder="Nombre" required autofocus autocomplete="name">
                             </div>
                             <div class="col-sm-6">
-                                <input type="number" class="form-control form-control-user" id="price" name="price"
-                                    value="{{ old('price') }}" placeholder="Precio" required autocomplete="price">
+                                <input type="number" class="form-control form-control-user" id="price" name="price" value="{{ old('price') }}" placeholder="Precio" required autocomplete="price">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="description"
-                                    name="description" value="{{ old('description') }}" placeholder="Descripción" required
-                                    autocomplete="description">
+                                <input type="text" class="form-control form-control-user" id="description" name="description" value="{{ old('description') }}" placeholder="Descripción" required autocomplete="description">
                             </div>
                             <div class="col-sm-6">
                                 <label for="availableEdit">Disponible</label>
                                 <input type="hidden" name="available" value="0">
-                                <input type="checkbox" class="" id="available" name="available" value="1"
-                                    {{ old('available') ? 'checked' : '' }}>
+                                <input type="checkbox" class="form-check-input" id="available" name="available" value="1" {{ old('available') ? 'checked' : '' }}> Disponible
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-user btn-block">Crear</button>
@@ -101,34 +99,32 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form method="PUT" id="formEdit" class="user"
-                        action="{{ route('products.update', $product->id) }}">
+                    <form method="PUT" id="formEdit" class="user" action="{{ route('products.update', $product->id) }}" enctype="multipart/form-data">
                         @csrf
                         @method('PUT')
                         <input type="text" id="productId" name="id" hidden>
+                        <div class="d-flex align-items-center justify-content-center">
+                            <img id="photoShow" src="" alt="" width="100px">
+                        </div>
+                        <div class="form-group row">
+                            <input type="file" class="form-control form-control-user" id="photoEdit" name="photo">
+                        </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="nameEdit" name="name"
-                                    value="{{ old('name') }}" placeholder="Nombres" required autofocus
-                                    autocomplete="name">
+                                <input type="text" class="form-control form-control-user" id="nameEdit" name="name" value="" placeholder="Nombre" required autofocus autocomplete="name">
                             </div>
                             <div class="col-sm-6">
-                                <input type="number" class="form-control form-control-user" id="priceEdit"
-                                    name="price" value="{{ old('price') }}" placeholder="Precio" required
-                                    autocomplete="price">
+                                <input type="number" class="form-control form-control-user" id="priceEdit" name="price" value="" placeholder="Precio" required autocomplete="price">
                             </div>
                         </div>
                         <div class="form-group row">
                             <div class="col-sm-6 mb-3 mb-sm-0">
-                                <input type="text" class="form-control form-control-user" id="descriptionEdit"
-                                    name="description" value="{{ old('description') }}" placeholder="Descripción"
-                                    required autocomplete="description">
+                                <input type="text" class="form-control form-control-user" id="descriptionEdit" name="description" value="" placeholder="Descripción" required autocomplete="description">
                             </div>
                             <div class="col-sm-6">
                                 <label for="availableEdit">Disponible</label>
                                 <input type="hidden" name="available" value="0">
-                                <input type="checkbox" class="" id="availableEdit" name="available"
-                                    value="1">
+                                <input type="checkbox" class="form-check-input" id="availableEdit" name="available" value="1"> Disponible
                             </div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-user btn-block">Editar</button>
@@ -169,7 +165,6 @@
     <script>
         $(document).on('click', '.edit', function() {
             var productId = $(this).attr('id');
-
             $.get('products/' + productId + '/edit', {}, function(data) {
                 var product = data.product;
                 $('input[id="productId"]').val(productId);
@@ -178,21 +173,32 @@
                 $('input[id="descriptionEdit"]').val(product.description);
                 if (product.available == 1) {
                     $('input[id="availableEdit"]').prop('checked', true);
+                } else {
+                    $('input[id="availableEdit"]').prop('checked', false);
+                }
+                if(product.photo){
+                    $('img[id="photoShow"]').attr('src', "{{ asset('img') }}/" + product.photo);
+                } else {
+                    $('img[id="photoShow"]').attr('src', "");
                 }
             })
         })
 
         $('#formEdit').submit(function(e) {
             e.preventDefault();
-
-            var form = $(this);
-            var productId = form.find('input[name="id"]').val();
+            var form = $(this)[0];
+            var productId = $('input[name="id"]').val();
             var url = "/products/" + productId;
-
+            var formData = new FormData(form);
             $.ajax({
                 url: url,
-                type: 'PUT',
-                data: form.serialize()
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                headers:{
+                    'X-HTTP-Method-Override': 'PUT'
+                }
             }).always(function(respose) {
                 console.log("Actualización exitosa", respose);
                 location.reload();
@@ -206,11 +212,9 @@
 
         $('#formDelete').submit(function(e) {
             e.preventDefault();
-
             var form = $(this);
             var productId = form.find('button[id="delete"]').val();
             var url = "/products/" + productId;
-
             $.ajax({
                 url: url,
                 type: 'DELETE',

@@ -19,7 +19,7 @@ class Product extends Model
         'photo'
     ];
 
-    public function Order(){
-        return $this->belongsTo('App\Models\Order');
+    public function orders(){
+        return $this->hasMany('App\Models\Order');
     }
 }

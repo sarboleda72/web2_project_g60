@@ -9,10 +9,10 @@ class OrderRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-    public function authorize(): bool
-    {
-        return false;
-    }
+        public function authorize(): bool
+        {
+            return true;
+        }
 
     /**
      * Get the validation rules that apply to the request.
@@ -22,7 +22,11 @@ class OrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'user_id' => ['required', 'exists:users,id'],
+            'product_id' => ['required', 'exists:products,id'],
+            'delivery_address' => ['required', 'string', 'max:100'],
+            'description' => ['required', 'string', 'max:255'],
+            'total' => ['required', 'numeric', 'min:0']
         ];
     }
 }
