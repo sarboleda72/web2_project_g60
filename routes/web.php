@@ -33,5 +33,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::post('users/search', [UserController::class, 'search']);
+Route::post('orders/search', [OrderController::class, 'search']);
 
 require __DIR__.'/auth.php';
